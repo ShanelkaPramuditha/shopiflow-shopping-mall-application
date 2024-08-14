@@ -1,5 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import PropTypes from 'prop-types';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -11,8 +12,10 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import InputField from '@/components/form-field';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { RadioGroup } from '@/components/ui/radio-group';
 import { createUserValidation } from '@/validations/user-validation';
 import { userRegister } from '@/api/user.api';
 
@@ -26,7 +29,7 @@ export default function Register() {
     reset,
   } = useForm({
     resolver: zodResolver(createUserValidation),
-    reValidateMode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       gender: 'male',
     },
@@ -54,6 +57,42 @@ export default function Register() {
     addUser.mutate(data);
   };
 
+  // Text input field component
+  const TextInputField = ({
+    label,
+    name,
+    type = 'text',
+    defaultValue = '',
+  }) => (
+    <div className="space-y-2">
+      <Label htmlFor={name}>{label}</Label>
+      <Input
+        id={name}
+        type={type}
+        defaultValue={defaultValue}
+        placeholder={label}
+        {...register(name)}
+        aria-invalid={errors[name] ? 'true' : 'false'}
+        aria-describedby={`${name}-error`}
+      />
+      {errors[name] && (
+        <span
+          id={`${name}-error`}
+          className="text-sm text-red-500"
+        >
+          {errors[name]?.message}
+        </span>
+      )}
+    </div>
+  );
+
+  TextInputField.propTypes = {
+    label: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string,
+    defaultValue: PropTypes.string,
+  };
+
   // User registration form
   const UserRegisterForm = () => (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -68,68 +107,80 @@ export default function Register() {
       <div className="border-t border-gray-300" />
       <CardContent className="space-y-4 px-4 py-6">
         <div className="grid grid-cols-2 gap-4">
-          <InputField
+          <TextInputField
             label="First Name"
             name="firstName"
-            register={register}
-            errors={errors}
           />
-          <InputField
+          <TextInputField
             label="Last Name"
             name="lastName"
-            register={register}
-            errors={errors}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <InputField
+          <TextInputField
             label="Email"
             name="email"
             type="email"
-            register={register}
-            errors={errors}
           />
-          <InputField
-            label="Mobile"
-            name="mobile"
-            register={register}
-            errors={errors}
-          />
+          <TextInputField label="Mobile" name="mobile" />
         </div>
-        <InputField
-          type="radio"
-          label="Gender"
-          name="gender"
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-          ]}
-          register={register}
-          errors={errors}
-        />
         <div className="grid grid-cols-2 gap-4">
-          <InputField
+          <div className="space-y-2">
+            <Label>Gender</Label>
+            <RadioGroup
+              name="gender"
+              id="gender"
+              className="flex gap-8"
+            >
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  value="male"
+                  name="gender"
+                  id="male"
+                  {...register('gender')}
+                />
+                <Label htmlFor="male" className="ms-3">
+                  Male
+                </Label>
+              </div>
+              <div className="flex items-center">
+                <input
+                  type="radio"
+                  value="female"
+                  name="gender"
+                  id="female"
+                  {...register('gender')}
+                />
+                <Label htmlFor="female" className="ms-3">
+                  Female
+                </Label>
+              </div>
+            </RadioGroup>
+            {errors.gender && (
+              <span className="text-sm text-red-500">
+                {errors.gender?.message}
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-4">
+          <TextInputField
             label="Password"
             name="password"
             type="password"
-            register={register}
-            errors={errors}
           />
-          <InputField
+          <TextInputField
             label="Confirm Password"
             name="confirmPassword"
             type="password"
-            register={register}
-            errors={errors}
           />
         </div>
         <div className="hidden">
-          <InputField
+          <TextInputField
             label="Role"
             name="role"
             defaultValue="user"
-            register={register}
-            errors={errors}
           />
         </div>
       </CardContent>
