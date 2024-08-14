@@ -1,18 +1,10 @@
 import { Link } from 'react-router-dom';
 import { MdMenu } from 'react-icons/md';
 import { FiSearch } from 'react-icons/fi';
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-} from '@/components/ui/dropdown-menu';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Sheet,
-  SheetTrigger,
-  SheetContent,
-} from '@/components/ui/sheet';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/sheet';
 import Logo from '@/assets/logo/logo.png';
 import AvatarIcon from '@/components/navbar/avatar';
 
@@ -36,11 +28,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-white dark:border-gray-800 dark:bg-gray-950">
       <div className="container mx-auto flex h-16 max-w-6xl items-center justify-between px-4 md:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-10 w-10 rounded-md"
-          />
+          <img src={Logo} alt="Logo" className="h-10 w-10 rounded-md" />
           <span className="sr-only">ShopiFlow</span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
@@ -58,11 +46,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full"
-              >
+              <Button variant="ghost" size="icon" className="rounded-full">
                 <FiSearch className="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 <span className="sr-only">Search</span>
               </Button>
@@ -70,26 +54,16 @@ export default function Navbar() {
             <DropdownMenuContent className="w-[300px] p-4">
               <div className="relative">
                 <FiSearch className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <Input
-                  type="search"
-                  placeholder="Search..."
-                  className="pl-8 w-full"
-                />
+                <Input type="search" placeholder="Search..." className="pl-8 w-full" />
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
           <AvatarIcon />
           <Sheet>
             <SheetTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="rounded-full md:hidden"
-              >
+              <Button variant="ghost" size="icon" className="rounded-full md:hidden">
                 <MdMenu className="h-5 w-5 text-gray-800 dark:text-gray-400" />
-                <span className="sr-only">
-                  Toggle navigation menu
-                </span>
+                <span className="sr-only">Toggle navigation menu</span>
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="md:hidden">

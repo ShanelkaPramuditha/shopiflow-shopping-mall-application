@@ -20,12 +20,10 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 });
 
-// Refresh access token
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const cookies = req.cookies;
 
-  // Check if refresh token exists
-  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorizeds' });
+  if (!cookies?.jwt) return res.status(401).json({ message: 'Unauthorized' });
 
   const refreshToken = cookies.jwt;
 
@@ -37,7 +35,6 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
   }
 });
 
-// Clear cookie
 const logoutUser = (req, res) => {
   const cookies = req.cookies;
   if (!cookies?.jwt) return res.sendStatus(204); //No content

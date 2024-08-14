@@ -1,18 +1,17 @@
-import { instance } from '@/hooks/use-axios';
+import axios from 'axios';
 
-export const UserRegister = async (data) => {
-  const response = await instance.post('/api/user', data);
-  return response.data;
+export const userRegister = async (data) => {
+  const { data: response } = await axios.post(
+    'http://localhost:3000/api/auth/register',
+    data,
+  );
+  return response;
 };
 
-export const getProfileData = async () => {
-  try {
-    const response = await instance.get(
-      '/api/user/profile',
-    );
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching profile data:', error);
-    throw error; // Rethrow the error so it can be handled by the caller
-  }
+export const userProfile = async () => {
+  const { data: response } = await axios.get(
+    'http://localhost:3000/api/user/profile',
+    { withCredentials: true },
+  );
+  return response;
 };

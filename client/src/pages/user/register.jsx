@@ -14,7 +14,7 @@ import {
 import InputField from '@/components/form-field';
 import { Button } from '@/components/ui/button';
 import { createUserValidation } from '@/validations/user-validation';
-import { UserRegister } from '@/api/user.api';
+import { userRegister } from '@/api/user.api';
 
 export default function Register() {
   const [form, setForm] = useState('user');
@@ -33,13 +33,10 @@ export default function Register() {
   });
 
   const addUser = useMutation({
-    mutationFn: UserRegister,
+    mutationFn: userRegister,
     onSuccess: () => {
       toast.success('Registered successfully');
       reset();
-      setTimeout(() => {
-        window.location.href = '/login';
-      }, 1000);
     },
     onError: (error) => {
       console.log(error.response?.status);

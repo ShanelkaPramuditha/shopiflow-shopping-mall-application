@@ -1,10 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import {
-  useMutation,
-  useQuery,
-} from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import {
   Card,
   CardHeader,
@@ -17,13 +14,8 @@ import { Button } from '@/components/ui/button';
 import { userLoginValidation } from '@/validations/user-validation';
 import InputField from '@/components/form-field';
 import { userLogin } from '@/api/auth.api';
-import { useAuthStore } from '@/store/auth-store';
-import { getProfileData } from '@/api/user.api';
 
 export default function Login() {
-  const login = useAuthStore((state) => state.login);
-  const profile = useAuthStore((state) => state.profile);
-
   const {
     register,
     handleSubmit,
@@ -33,47 +25,16 @@ export default function Login() {
     reValidateMode: 'onBlur',
   });
 
-  const userData = useQuery({
-    queryKey: ['profile'],
-    queryFn: getProfileData,
-    enabled: false,
-  });
-
   const loginUser = useMutation({
     mutationFn: userLogin,
-    onSuccess: async (data) => {
-      login(data.accessToken);
+    onSuccess: () => {
       toast.success('Logged in successfully');
-
-      // Fetch profile data after successful login
-      try {
-        // Enable the query and refetch
-        userData
-          .refetch()
-          .then((result) => {
-            profile(result.data.role);
-            setTimeout(() => {
-              window.location.href = '/';
-            }, 1000);
-          })
-          .catch((error) => {
-            // Handle errors from refetch
-            toast.error('Failed to fetch profile data');
-            console.error(
-              'Error fetching profile data:',
-              error,
-            );
-          });
-      } catch (error) {
-        toast.error('Failed to fetch profile data');
-        console.error(
-          'Error fetching profile data:',
-          error,
-        );
-      }
+      setTimeout(() => {
+        window.location.href = '/profile';
+      }, 1000);
     },
     onError: (error) => {
-      console.log(error);
+      console.log(error.response?.status);
       if (error.response.status === 401) {
         toast.error('Invalid credentials');
       }

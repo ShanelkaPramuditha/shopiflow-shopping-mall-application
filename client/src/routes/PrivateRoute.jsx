@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
 import { Navigate } from 'react-router-dom';
-import { useAuthStore } from '@/store/auth-store';
+import useAuth from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/ui/spinner';
 
 const PrivateRoute = ({ element }) => {
-  const isAuthenticated = useAuthStore(
-    (state) => state.isLoggedIn,
-  );
+  const isAuthenticated = useAuth();
 
   if (isAuthenticated === null) {
     return <LoadingSpinner />;
