@@ -1,10 +1,6 @@
 import { lazy, Suspense } from 'react';
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/ui/spinner';
-import PrivateRoute from '@/routes/PrivateRoute';
 
 const PageLoader = () => (
   <div className="flex items-center justify-center h-screen">
@@ -16,9 +12,7 @@ const PageLoader = () => (
 const Home = lazy(() => import('@/pages/home/home'));
 
 // Auth Pages
-const Register = lazy(
-  () => import('@/pages/user/register'),
-);
+const Register = lazy(() => import('@/pages/user/register'));
 const Login = lazy(() => import('@/pages/user/login'));
 const Profile = lazy(() => import('@/pages/user/profile'));
 
@@ -60,7 +54,7 @@ const router = createBrowserRouter([
         path: 'profile',
         element: (
           <Suspense fallback={<PageLoader />}>
-            <PrivateRoute element={<Profile />} />
+            <Profile />
           </Suspense>
         ),
       },

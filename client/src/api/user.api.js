@@ -7,11 +7,3 @@ export const userRegister = async (data) => {
   );
   return response;
 };
-
-export const userProfile = async () => {
-  const { data: response } = await axios.get(
-    'http://localhost:3000/api/user/profile',
-    { withCredentials: true },
-  );
-  return response;
-};

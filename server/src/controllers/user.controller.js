@@ -18,9 +18,6 @@ const UserController = {
     } catch (error) {
       return res.status(error.status).json({ message: error.message });
     }
-  },
-  profile: async (req, res) => {
-    return res.status(200).json({ message: 'Profile' });
   }
 };
 
