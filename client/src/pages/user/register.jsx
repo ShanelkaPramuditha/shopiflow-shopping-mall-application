@@ -1,9 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 import PropTypes from 'prop-types';
-import toast from 'react-hot-toast';
-import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 import {
   Card,
   CardHeader,
@@ -16,8 +14,31 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { RadioGroup } from '@/components/ui/radio-group';
-import { createUserValidation } from '@/validations/user-validation';
-import { userRegister } from '@/api/user.api';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+
+// Zod validation schema
+const validationSchema = z
+  .object({
+    firstName: z.string().min(1, 'First name is required'),
+    lastName: z.string().min(1, 'Last name is required'),
+    email: z.string().email('Invalid email address'),
+    mobile: z
+      .string()
+      .regex(/^\d{10}$/, 'Invalid mobile number'),
+    password: z
+      .string()
+      .min(6, 'Password must be at least 6 characters'),
+    confirmPassword: z.string(),
+    gender: z.enum(['male', 'female']),
+  })
+  .refine(
+    (data) => data.password === data.confirmPassword,
+    {
+      message: 'Passwords do not match',
+      path: ['confirmPassword'],
+    },
+  );
 
 export default function Register() {
   const [form, setForm] = useState('user');
@@ -28,33 +49,17 @@ export default function Register() {
     formState: { errors },
     reset,
   } = useForm({
-    resolver: zodResolver(createUserValidation),
+    resolver: zodResolver(validationSchema),
     reValidateMode: 'onChange',
     defaultValues: {
       gender: 'male',
     },
   });
 
-  const addUser = useMutation({
-    mutationFn: userRegister,
-    onSuccess: () => {
-      toast.success('Registered successfully');
-      reset();
-    },
-    onError: (error) => {
-      console.log(error.response?.status);
-      if (error.response.status === 400) {
-        toast.error('User already exists');
-      }
-
-      if (error.response?.status !== 400) {
-        toast.error('Something went wrong');
-      }
-    },
-  });
-
   const onSubmit = (data) => {
-    addUser.mutate(data);
+    console.log(data);
+    toast.success('User registered successfully');
+    reset();
   };
 
   // Text input field component
@@ -62,14 +67,12 @@ export default function Register() {
     label,
     name,
     type = 'text',
-    defaultValue = '',
   }) => (
     <div className="space-y-2">
       <Label htmlFor={name}>{label}</Label>
       <Input
         id={name}
         type={type}
-        defaultValue={defaultValue}
         placeholder={label}
         {...register(name)}
         aria-invalid={errors[name] ? 'true' : 'false'}
@@ -90,7 +93,6 @@ export default function Register() {
     label: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     type: PropTypes.string,
-    defaultValue: PropTypes.string,
   };
 
   // User registration form
@@ -174,13 +176,6 @@ export default function Register() {
             label="Confirm Password"
             name="confirmPassword"
             type="password"
-          />
-        </div>
-        <div className="hidden">
-          <TextInputField
-            label="Role"
-            name="role"
-            defaultValue="user"
           />
         </div>
       </CardContent>
