@@ -2,26 +2,19 @@ import { lazy, Suspense } from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { LoadingSpinner } from '@/components/ui/spinner';
 
-const PageLoader = () => (
-  <div className="flex items-center justify-center h-screen">
-    <LoadingSpinner className="w-32 h-32" />
-  </div>
-);
-
 // Static Pages
 const Home = lazy(() => import('@/pages/home/home'));
 
 // Auth Pages
-const Register = lazy(() => import('@/pages/user/register'));
-const Login = lazy(() => import('@/pages/user/login'));
-const Profile = lazy(() => import('@/pages/user/profile'));
+const Login = lazy(() => import('@/pages/login/login'));
 
 const Layout = lazy(() => import('@/layout'));
 
 const router = createBrowserRouter([
   {
+    path: '/',
     element: (
-      <Suspense fallback={<PageLoader />}>
+      <Suspense fallback={<LoadingSpinner />}>
         <Layout />
       </Suspense>
     ),
@@ -29,32 +22,16 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: (
-          <Suspense fallback={<PageLoader />}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'register',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Register />
           </Suspense>
         ),
       },
       {
         path: 'login',
         element: (
-          <Suspense fallback={<PageLoader />}>
+          <Suspense fallback={<LoadingSpinner />}>
             <Login />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'profile',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Profile />
           </Suspense>
         ),
       },

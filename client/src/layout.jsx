@@ -1,7 +1,6 @@
 import { Outlet } from 'react-router-dom';
 import Navbar from '@/components/navbar/navbar';
 import Footer from '@/components/footer/footer';
-import { Toaster } from 'react-hot-toast';
 
 const Layout = () => {
   return (
@@ -11,12 +10,6 @@ const Layout = () => {
         <Outlet />
       </div>
       <Footer />
-      <Toaster
-        position="bottom-right"
-        containerStyle={{
-          zIndex: 9999,
-        }}
-      />
     </div>
   );
 };
