@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import loginLimiter from '../middleware/login-limiter.js';
-import { loginUser, refreshAccessToken, logoutUser } from '../controllers/auth.controller.js';
+import { login, logout, refresh } from '../controllers/auth.controller.js';
 
 const router = Router();
 
-router.post('/', loginLimiter, loginUser);
-router.get('/', refreshAccessToken);
-router.post('/logout', logoutUser);
+router.post('/', loginLimiter, login);
+router.get('/', refresh);
+router.post('/logout', logout);
 
 export default router;
