@@ -1,6 +1,6 @@
 import pino from 'pino';
 import pinoHttp from 'pino-http';
-import { LOGGER_CONFIG } from '../constants/constants.js';
+import { LOGGER_CONFIG } from '../constants/constants';
 
 // Create a transport for pino-pretty
 const transport = pino.transport({
